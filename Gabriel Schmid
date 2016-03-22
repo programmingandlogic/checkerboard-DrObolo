@@ -1,0 +1,86 @@
+/*
+ * File: CheckerboardKarel.java
+ * ----------------------------
+ * When you finish writing it, the CheckerboardKarel class should draw
+ * a checkerboard using beepers, as described in Assignment 1.  You
+ * should make sure that your program works for all of the sample
+ * worlds supplied in the starter folder.
+ */
+
+import stanford.karel.*;
+
+public class CheckerboardKarel extends SuperKarel {
+
+	public void run () {
+		placeTwoRows ();
+		placeRemainingRows ();
+	}
+	
+	private void placeTwoRows() {
+		placeFirstRow ();
+		placeSecondRow ();
+		prepareForNextRow ();
+	}
+	//finishes first two rows, checks if north is clear, moves to ready position for placing next row
+	private void placeRemainingRows() {
+		while (facingWest()) {
+			turnRight ();
+			if (frontIsClear()) {
+				move ();
+				turnRight ();
+			}
+		}
+		while (frontIsClear()) {
+			placeTwoRows ();
+		}
+	}
+	
+	//puts beeper at first spot, checks if front is blocked, then fills in every second spot, 
+	//moves back to start, and prepares for next row
+	private void placeFirstRow() {
+		putBeeper ();
+		while (frontIsBlocked()) {
+			turnLeft ();
+		}
+		while (frontIsClear()) {
+				move ();
+				if (frontIsClear()) {
+				move ();
+				putBeeper ();
+			}
+		}
+		turnAround ();
+		while (frontIsClear()) {
+			move ();
+		}
+		prepareForNextRow();
+	}
+	
+	//checks if front is clear, moves, puts beeper, then fills in every second spot, moving back to start when done
+	private void placeSecondRow() {
+		if (frontIsClear()) {
+		move ();
+		putBeeper();
+		}
+		while (frontIsClear()) {
+			move ();
+			if (frontIsClear()) {
+				move();
+				putBeeper();
+			}
+		}
+		turnAround ();
+		while (frontIsClear()) {
+			move ();
+		}
+	}
+	
+	//looks up, checks if front is clear, moves to ready position for next row
+	private void prepareForNextRow() {
+			turnRight ();
+		if (frontIsClear()) {
+			move ();
+			turnRight ();
+		}
+	}
+}
